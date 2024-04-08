@@ -1,4 +1,7 @@
 //On récupère les champs de saisies email et password ainsi que le formulaire
+
+// Ajouter vérification des champs email et password avant soumission ( Regex )
+
 let emailUtilisateur = document.getElementById("email");
 let mdpUtilisateur = document.getElementById("mdp");
 const connexionUtilisateur = document.querySelector("form");

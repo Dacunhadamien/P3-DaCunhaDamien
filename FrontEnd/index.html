@@ -8,22 +8,35 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet" />
     <meta name="description" content="" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="stylesheet" href="./assets/style.css" />
     <script src="script.js" type="module"></script>
+    <script src="modal.js" type="module"></script>
   </head>
   <body>
     <header>
-      <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
-      <nav>
-        <ul>
-          <li><a href="#portfolio">projets</a></li>
-          <li><a href="#contact">contact</a></li>
-          <li><a href="login.html">login</a></li>
-          <li>
-            <a href="https://www.instagram.com"><img src="./assets/icons/instagram.png" alt="Instagram" /></a>
-          </li>
-        </ul>
-      </nav>
+      <div id="edit" class="inactive">
+        <h3><i class="fa-regular fa-pen-to-square"></i> Mode édition</h3>
+      </div>
+      <div class="div-header">
+        <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+        <nav>
+          <ul>
+            <li><a href="#portfolio">projets</a></li>
+            <li><a href="#contact">contact</a></li>
+            <li><a href="login.html" class="active">login</a><a href="#" class="inactive" id="logout">logout</a></li>
+            <li>
+              <a href="https://www.instagram.com"><img src="./assets/icons/instagram.png" alt="Instagram" /></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
     <main>
       <section id="introduction">
@@ -42,6 +55,45 @@
       </section>
       <section id="portfolio">
         <h2>Mes Projets</h2>
+        <div id="modif" class="inactive">
+          <a href="#modal1" class="js-modal"><i class="fa-regular fa-pen-to-square"></i> modifier</a>
+          <aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-modal="false" style="display: none">
+            <div class="modal-wrapper" id="wrapper1">
+              <button type="button" class="closeButton"><i class="fa-solid fa-xmark"></i></button>
+              <h3>Galerie photo</h3>
+              <div class="galleryModal"></div>
+              <div class="overline">
+                <button type="button" id="addPhoto">Ajouter une photo</button>
+              </div>
+            </div>
+            <div class="modal-wrapper" style="display: none" id="wrapper2">
+              <button type="button" class="closeButton"><i class="fa-solid fa-xmark"></i></button>
+              <button type="button" class="previousButton"><i class="fa-solid fa-arrow-left"></i></button>
+              <h3>Ajout photo</h3>
+              <form class="ajout-photo">
+                <div class="section-choix-image">
+                  <i class="fa-regular fa-image" id="logo-image"></i>
+                  <label for="input-fichier">+ Ajouter photo</label>
+                  <input id="input-fichier" name="input-fichier" type="file" hidden />
+                  <p>jpg, png : 4mo max</p>
+                </div>
+                <div class="section-input">
+                  <label for="Titre">Titre</label>
+                  <input type="text" name="titre" id="titre" />
+                  <label for="categorie">Catégorie</label>
+                  <select name="categorie" id="categorie">
+                    <option value="1">Objets</option>
+                    <option value="2">Appartements</option>
+                    <option value="3">Hotels & Restaurants</option>
+                  </select>
+                </div>
+                <div class="overline">
+                  <button type="submit" id="Valider">Valider</button>
+                </div>
+              </form>
+            </div>
+          </aside>
+        </div>
         <div class="bouton-filtres">
           <button type="button">Tous</button>
           <button type="button">Objets</button>
