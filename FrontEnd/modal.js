@@ -11,8 +11,8 @@ const openModal = function (e) {
   target.setAttribute("aria-modal", "true");
   modal = target;
   modal.addEventListener("click", closeModal);
-  modal.querySelector(".closeButton").addEventListener("click", closeModal);
-  modal.querySelector(".modal-wrapper").addEventListener("click", stopPropagation);
+  document.querySelectorAll(".closeButton").forEach((bouton) => bouton.addEventListener("click", closeModal));
+  document.querySelectorAll(".modal-wrapper").forEach((wrapper) => wrapper.addEventListener("click", stopPropagation));
   modal.querySelector(".previousButton").addEventListener("click", stopPropagation);
   modal.querySelector("form").addEventListener("click", stopPropagation);
 };
@@ -45,7 +45,7 @@ const lienModal = document.querySelector(".js-modal");
 lienModal.addEventListener("click", openModal);
 
 //--------------Modale 2-----------------
-document.querySelector(".overline button").addEventListener("click", function (e) {
+document.getElementById("addPhoto").addEventListener("click", function (e) {
   document.getElementById("wrapper1").style.display = "none";
   document.getElementById("wrapper2").style.display = "flex";
 });

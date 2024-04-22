@@ -235,6 +235,19 @@ a:hover {
 
 .bouton-filtres button {
   border-radius: 40px;
+  background-color: #1d6154;
+  font-size: large;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 10px 20px;
+  color: white;
+  border-color: #1d6154;
+  font-family: "Syne";
+  border-style: solid;
+}
+
+.bouton-filtres button:not(.selected) {
+  border-radius: 40px;
   background-color: transparent;
   font-size: large;
   margin-left: 10px;
@@ -401,11 +414,10 @@ form a {
   font-size: xx-large;
   margin: 20px;
 }
-#addPhoto,
-#Valider {
+.overline button {
   border-radius: 40px;
   background-color: #1d6154;
-  font-size: large;
+  font-size: medium;
   margin-left: 10px;
   margin-right: 10px;
   padding: 10px 40px;
@@ -461,8 +473,8 @@ select {
   font-weight: 500;
   box-shadow: 0px 4px 14px 0px #00000017;
   border: none;
-  min-height: 50px;
-  margin: 20px 0;
+  min-height: 30px;
+  margin: 12px 0;
 }
 
 .section-choix-image {
@@ -475,16 +487,22 @@ select {
   width: 100%;
   text-align: center;
   margin-bottom: 20px;
+  height: 40%;
 }
 
 .section-choix-image i,
 button,
 p {
-  padding: 20px;
+  padding: 15px;
 }
 
 .section-choix-image p {
-  font-size: small;
+  font-size: x-small;
+}
+
+.section-choix-image img {
+  max-height: 100%;
+  max-width: 100%;
 }
 
 input[type="file"] {
@@ -497,7 +515,7 @@ input[type="file"] {
   border-radius: 30px;
   padding: 10px 20px;
   font-family: "Work Sans";
-  font-size: x-large;
+  font-size: large;
   width: 50%;
   border: none;
 }
@@ -507,8 +525,9 @@ input[type="file"] {
 }
 
 #logo-image {
-  font-size: 5em;
+  font-size: 4em;
   color: #b9c5cc;
+  max-height: 2em;
 }
 
 .previousButton {
@@ -528,8 +547,8 @@ input[type="file"] {
 }
 
 .galleryPhotos {
-  max-width: 6em;
-  max-height: 7.5em;
+  max-width: 4em;
+  max-height: 5em;
 }
 
 .galleryModal article {
@@ -543,5 +562,11 @@ input[type="file"] {
   top: 5%;
   color: white;
   background-color: black;
-  font-size: medium;
+  font-size: 0.5em;
+  padding: 0.8em;
+}
+
+#valider:disabled {
+  border-color: gray;
+  background-color: gray;
 }

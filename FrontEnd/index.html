@@ -72,13 +72,13 @@
               <h3>Ajout photo</h3>
               <form class="ajout-photo">
                 <div class="section-choix-image">
-                  <i class="fa-regular fa-image" id="logo-image"></i>
-                  <label for="input-fichier">+ Ajouter photo</label>
-                  <input id="input-fichier" name="input-fichier" type="file" hidden />
-                  <p>jpg, png : 4mo max</p>
+                  <i id="logo-image" class="fa-regular fa-image out"></i>
+                  <label for="input-fichier" class="out">+ Ajouter photo</label>
+                  <input id="input-fichier" name="input-fichier" type="file" class="out" hidden />
+                  <p class="out">jpg, png : 4mo max</p>
                 </div>
                 <div class="section-input">
-                  <label for="Titre">Titre</label>
+                  <label for="titre">Titre</label>
                   <input type="text" name="titre" id="titre" />
                   <label for="categorie">Catégorie</label>
                   <select name="categorie" id="categorie">
@@ -88,17 +88,17 @@
                   </select>
                 </div>
                 <div class="overline">
-                  <button type="submit" id="Valider">Valider</button>
+                  <button type="submit" id="valider">Valider</button>
                 </div>
               </form>
             </div>
           </aside>
         </div>
         <div class="bouton-filtres">
-          <button type="button">Tous</button>
-          <button type="button">Objets</button>
-          <button type="button">Appartements</button>
-          <button type="button">Hotels & restaurants</button>
+          <button type="button" class="active selected" value="0">Tous</button>
+          <button type="button" class="active" value="1">Objets</button>
+          <button type="button" class="active" value="2">Appartements</button>
+          <button type="button" class="active" value="3">Hotels & restaurants</button>
         </div>
         <div class="gallery"></div>
       </section>

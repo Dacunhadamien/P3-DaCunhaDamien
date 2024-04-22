@@ -1,43 +1,7 @@
-// ------------------Récupération des travaux sur l'API-----------------------------
+//--------------------Gestion log-in / log out----------------------
 
-//Si les travaux sont déjà dans le local storage, on les récupère
-
-//Sinon, on va les chercher sur l'API
-
-let works = await fetch("http://localhost:5678/api/works")
-  .then((response) => {
-    return response.json();
-  })
-  .catch((error) => console.log(error));
-
-//Fonction pour afficher sur la page les travaux disponibles dans l'API, récupérés dans la constante works
-async function genererWork(works) {
-  //Avant de générer un nouvel affichage, on remet à zéro la class gallery
-  document.querySelector(".gallery").innerHTML = "";
-  for (let i = 0; i < works.length; i++) {
-    //On crée les élements HTML
-    let workFigure = document.createElement("figure");
-    let workImage = document.createElement("img");
-    let workFigcaption = document.createElement("figcaption");
-
-    //On fait coincider les valeurs des balises avec celles présentes sur works
-    workImage.src = works[i].imageUrl;
-    workImage.alt = works[i].title;
-    workFigcaption.innerHTML = works[i].title;
-
-    //On intègre nos balises avec leurs valeurs dans l'HTML
-    workFigure.appendChild(workImage);
-    workFigure.appendChild(workFigcaption);
-    document.querySelector(".gallery").appendChild(workFigure);
-  }
-}
-
-//---------------------Gestion ouverture de la page ------------------
-
-genererWork(works);
-
-// Si on est connecté, on passe tout les éléments actifs en inactif, et on masque "login"
 let token = localStorage.getItem("token");
+// Gestion du log-in
 if (token !== null) {
   const elmtsInactifs = document.querySelectorAll(".inactive");
   const elmtsActifs = document.querySelectorAll(".active");
@@ -60,100 +24,107 @@ if (token !== null) {
   });
 }
 
-//---------------------Gestion des filtres-------------------
-
-let workFiltre = works;
-
-//Récupération de la liste des boutons
-const listeBoutons = document.querySelectorAll(".bouton-filtres button");
-
-//On écoute le click sur les boutons
-for (let i = 0; i < listeBoutons.length; i++) {
-  let bouton = listeBoutons[i];
-  bouton.addEventListener("click", function (event) {
-    //Selon le bouton sur lequel on clique, on filtre les photos par categoryId grâce à la variable workFiltre
-    switch (event.target) {
-      case listeBoutons[0]:
-        workFiltre = works;
-        break;
-      case listeBoutons[1]:
-        workFiltre = works.filter(function (works) {
-          return works.categoryId === 1;
-        });
-
-        break;
-      case listeBoutons[2]:
-        workFiltre = works.filter(function (works) {
-          return works.categoryId === 2;
-        });
-
-        break;
-      case listeBoutons[3]:
-        workFiltre = works.filter(function (works) {
-          return works.categoryId === 3;
-        });
-        break;
-    }
-    // On génère un nouvel affichage des travaux selon filtres
-    genererWork(workFiltre);
-  });
-}
-
-//----------------------Gestion modale--------------------
-
-function genererWorkmodale(works) {
-  let divGalleryPhoto = document.querySelector(".galleryModal");
-  divGalleryPhoto.innerHTML = "";
-  for (let i = 0; i < works.length; i++) {
-    //On crée les élements HTML
-    let workArticle = document.createElement("article");
-    let workImage = document.createElement("img");
-    // On indique les différents paramètres de nos balises
-    workImage.src = works[i].imageUrl;
-    workImage.alt = works[i].title;
-    workImage.classList.add("galleryPhotos");
-    //On donne aux boutons "trash" un id correspondant à l'id des works, utilisé plus tard dans la suppression des travaux.
-    workArticle.innerHTML = `<button id="${works[i].id}" class="trash"><i class="fa-solid fa-trash-can"></i></button>`;
-    //On intègre nos balises avec leurs valeurs dans l'HTML
-    workArticle.appendChild(workImage);
-    divGalleryPhoto.appendChild(workArticle);
+// -----------------Gestion des filtres -----------------------------
+document.querySelector(".bouton-filtres").addEventListener("click", function (event) {
+  if (event.target.tagName === "BUTTON") {
+    // Active le bouton cliqué et appelle la fonction chargerWorks avec l'id de la catégorie.
+    definirBoutonActif(event.target);
+    const categoryId = Number(event.target.value);
+    chargerWorks(categoryId);
   }
-}
+});
 
-// On ne génère les travaux dans la modale qu'au click sur le lien
-
-document.querySelector(".js-modal").addEventListener("click", genererWorkmodale(works));
-
-//-------------Gestion suppression des travaux sur la modale -------------------
-
-const listeBoutonsModale = document.querySelectorAll(".trash");
-
-for (let i = 0; i < listeBoutonsModale.length; i++) {
-  let bouton = listeBoutonsModale[i];
-  bouton.addEventListener("click", async function (event) {
-    event.preventDefault();
-    await fetch(`http://localhost:5678/api/works/${event.currentTarget.id}`, {
-      method: "DELETE",
-      headers: {
-        Accept: "*/*",
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then(localStorage.removeItem("works"))
-      .then(genererWork(works))
-      .catch((error) => console.log(error));
-  });
-}
+chargerWorks();
 
 //-----------------------Ajouter photo------------------------------------
-const formulairePhoto = document.querySelector(".ajout-photo");
-formulairePhoto.addEventListener("submit", async function (e) {
-  e.preventDefault();
 
+const valider = document.getElementById("valider");
+valider.disabled = true;
+const inputs = document.querySelectorAll(".ajout-photo input");
+
+// Gestion du bouton valider
+inputs.forEach((element) => {
+  element.addEventListener("change", function () {
+    if (document.getElementById("titre").value !== "" && document.getElementById("input-fichier").files.length > 0) {
+      valider.disabled = false;
+    } else {
+      valider.disabled = true;
+    }
+  });
+});
+
+// Gestion de l'affichage de l'image préselectionnée
+document.getElementById("input-fichier").addEventListener("change", () => {
+  let fichierImage = document.getElementById("input-fichier");
+  const img = document.createElement("img");
+  img.src = URL.createObjectURL(fichierImage.files[0]);
+  document.querySelectorAll(".section-choix-image i, label, p").forEach((element) => element.classList.add("inactive"));
+  document.querySelector(".section-choix-image").appendChild(img);
+});
+
+// Suite au submit, on génère le form data que l'on envoie à l'API, puis on génère les works
+document.querySelector(".ajout-photo").addEventListener("submit", envoiFormData);
+
+// ------------------Fonctions-----------------------------
+
+async function chargerWorks(categoryId = 0) {
+  await fetch("http://localhost:5678/api/works")
+    .then((response) => {
+      return response.json();
+    })
+    .then((works) => {
+      //Gestion de la partie gallerie
+      document.querySelector(".gallery").innerHTML = "";
+      const filterData = works.filter((work) => work.categoryId === Number(categoryId) || categoryId === 0);
+
+      const figures = filterData.map(({ id, imageUrl, title }) => {
+        const figure = document.createElement("figure");
+        figure.dataset.id = id;
+
+        const img = document.createElement("img");
+        img.src = imageUrl;
+        img.alt = title;
+
+        const figcaption = document.createElement("figcaption");
+        figcaption.textContent = title;
+
+        figure.appendChild(img);
+        figure.appendChild(figcaption);
+
+        return figure;
+      });
+      figures.forEach((figure) => document.querySelector(".gallery").appendChild(figure));
+      //Gestion de la partie modale
+      document.querySelector(".galleryModal").innerHTML = "";
+      for (let i = 0; i < works.length; i++) {
+        //On crée les élements HTML
+        let workArticle = document.createElement("article");
+        let workImage = document.createElement("img");
+        // On indique les différents paramètres de nos balises
+        workImage.src = works[i].imageUrl;
+        workImage.alt = works[i].title;
+        workImage.classList.add("galleryPhotos");
+        //On donne aux boutons "trash" un id correspondant à l'id des works, utilisé plus tard dans la suppression des travaux.
+        workArticle.innerHTML = `<button id="${works[i].id}" class="trash"><i class="fa-solid fa-trash-can"></i></button>`;
+        //On intègre nos balises avec leurs valeurs dans l'HTML
+        workArticle.appendChild(workImage);
+        document.querySelector(".galleryModal").appendChild(workArticle);
+      }
+      //Gestion suppression des travaux sur la modale
+      const listeBoutonsModale = document.querySelectorAll(".trash");
+      for (let i = 0; i < listeBoutonsModale.length; i++) {
+        let bouton = listeBoutonsModale[i];
+        bouton.addEventListener("click", suppressionTravaux);
+      }
+    })
+    .catch((error) => console.log(error));
+}
+
+async function envoiFormData(e) {
+  e.preventDefault();
   const title = document.getElementById("titre").value;
   const categoryId = document.getElementById("categorie").value;
   const image = document.getElementById("input-fichier").files[0];
-
   const formData = new FormData();
   formData.append("title", title);
   formData.append("category", categoryId);
@@ -167,6 +138,36 @@ formulairePhoto.addEventListener("submit", async function (e) {
     },
     body: formData,
   })
-    .then(genererWork(works))
+    .then(alert(`Vous avez correctement importé ${title}`))
+    .then(chargerWorks())
+    .then(regenererAffichageImport)
     .catch((error) => console.log(error));
-});
+}
+
+async function suppressionTravaux(event) {
+  event.preventDefault();
+  await fetch(`http://localhost:5678/api/works//${event.currentTarget.id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "*/*",
+      Authorization: "Bearer " + token,
+    },
+  })
+    .then(chargerWorks())
+    .catch((error) => console.log(error));
+}
+
+function regenererAffichageImport() {
+  document.querySelectorAll(".section-choix-image i, label, p").forEach((element) => element.classList.remove("inactive"));
+  let image = document.querySelector(".section-choix-image img");
+  image.remove();
+  document.querySelector(".ajout-photo").reset();
+  valider.disabled = true;
+}
+
+function definirBoutonActif(button) {
+  // Enlève la classe "selected" de tous les boutons "bouton-filtres".
+  document.querySelectorAll(".bouton-filtres button").forEach((b) => b.classList.remove("selected"));
+  // Ajoute la classe "selected" au bouton cliqué.
+  button.classList.add("selected");
+}
