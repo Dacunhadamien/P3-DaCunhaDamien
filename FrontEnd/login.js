@@ -6,13 +6,13 @@ let emailUtilisateur = document.getElementById("email");
 let regEx = new RegExp("[a-z0-9._-]+@[a-z0-9._-]+\\.[a-z0-9._-]+");
 emailUtilisateur.addEventListener("change", function () {
   if (regEx.test(emailUtilisateur.value) !== true) {
-    alert("Erreur email incorrect");
+    alert("Email ou mot de passe incorrect");
   }
 });
 let mdpUtilisateur = document.getElementById("mdp");
 mdpUtilisateur.addEventListener("change", function () {
   if (mdpUtilisateur.value === "") {
-    alert("Erreur mot de passe incorrect");
+    alert("Email ou mot de passe incorrect");
   }
 });
 const connexionUtilisateur = document.querySelector("form");

@@ -47,8 +47,10 @@ inputs.forEach((element) => {
   element.addEventListener("change", function () {
     if (document.getElementById("titre").value !== "" && document.getElementById("input-fichier").files.length > 0) {
       valider.disabled = false;
+      document.getElementById("empty-field").innerHTML = "";
     } else {
       valider.disabled = true;
+      document.getElementById("empty-field").innerHTML = "<p>Merci de renseigner un titre et d'importer une image</p>";
     }
   });
 });
@@ -58,7 +60,7 @@ document.getElementById("input-fichier").addEventListener("change", () => {
   let fichierImage = document.getElementById("input-fichier");
   const img = document.createElement("img");
   img.src = URL.createObjectURL(fichierImage.files[0]);
-  document.querySelectorAll(".section-choix-image i, label, p").forEach((element) => element.classList.add("inactive"));
+  document.querySelectorAll(".section-choix-image i, .section-choix-image label, .section-choix-image p").forEach((element) => element.classList.add("inactive"));
   document.querySelector(".section-choix-image").appendChild(img);
 });
 

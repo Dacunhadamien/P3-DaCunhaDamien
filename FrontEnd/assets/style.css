@@ -570,3 +570,9 @@ input[type="file"] {
   border-color: gray;
   background-color: gray;
 }
+
+#empty-field {
+  color: red;
+  text-align: center;
+  font-size: small;
+}
